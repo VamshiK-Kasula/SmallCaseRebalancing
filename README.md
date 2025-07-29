@@ -1,6 +1,6 @@
-# Smallcase Portfolio Rebalancer
+# Basket Portfolio Rebalancer
 
-A Streamlit-based web application for rebalancing custom Smallcase portfolios. The application automatically fetches live stock prices and provides actionable recommendations for buying/selling shares to achieve target allocations.
+A Streamlit-based web application for rebalancing custom Basket portfolios. The application automatically fetches live stock prices and provides actionable recommendations for buying/selling shares to achieve target allocations.
 
 ## Features
 

@@ -12,11 +12,11 @@ class PortfolioUIComponents:
     @staticmethod
     def render_header() -> None:
         """Render the application header."""
-        st.set_page_config(page_title="Smallcase Rebalancer", layout="wide")
-        st.title("📊 Smallcase Portfolio Rebalancer")
+        st.set_page_config(page_title="Basket Rebalancer", layout="wide")
+        st.title("📊 Basket Portfolio Rebalancer")
         
         st.markdown("""
-        This tool helps you rebalance your custom Smallcase by comparing current allocations with your target weights.
+        This tool helps you rebalance your custom Basket by comparing current allocations with your target weights.
         Fill out the table below with your current holdings and desired target allocation.
         """)
         st.markdown("---")

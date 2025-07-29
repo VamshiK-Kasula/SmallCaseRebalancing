@@ -1,7 +1,7 @@
 """
 Main entry point for the Portfolio Rebalancing Application.
 
-This application helps users rebalance their custom Smallcase portfolios
+This application helps users rebalance their custom Basket portfolios
 by comparing current allocations with target weights and providing
 actionable recommendations for buying/selling shares.
 """

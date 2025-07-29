@@ -38,7 +38,7 @@ def setup_git():
         return False
     
     # Create initial commit
-    if not run_command('git commit -m "Initial commit: Smallcase Portfolio Rebalancer"', "Creating initial commit"):
+    if not run_command('git commit -m "Initial commit: Basket Portfolio Rebalancer"', "Creating initial commit"):
         return False
     
     print()

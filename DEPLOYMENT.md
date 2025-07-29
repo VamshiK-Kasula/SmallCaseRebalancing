@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide covers different ways to deploy your Smallcase Portfolio Rebalancer application.
+This guide covers different ways to deploy your Basket Portfolio Rebalancer application.
 
 ## 🚀 Quick Start: Streamlit Cloud (Easiest)
 
