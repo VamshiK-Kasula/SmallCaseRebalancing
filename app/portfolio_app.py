@@ -3,6 +3,7 @@ Main application class for portfolio rebalancing.
 """
 import pandas as pd
 import logging
+import streamlit as st
 from typing import Optional
 
 from services.price_service import PriceService
@@ -24,40 +25,44 @@ class PortfolioRebalancerApp:
         self.ui = PortfolioUIComponents()
     
     def run(self) -> None:
-        """Run the main application."""
         try:
-            # Render header
-            self.ui.render_header()
-            
-            # Load and process portfolio data
-            df = self._load_and_process_data()
-            
-            # Render portfolio table
-            edited_df = self.ui.render_portfolio_table(df)
-            
-            # Calculate and display metrics
-            self._display_portfolio_metrics(edited_df)
-            
-            # Handle rebalancing
-            self._handle_rebalancing(edited_df)
-            
-            # Render footer
+            print("Running application")
+
+            # 1. Load user data from session state or file
+            if 'portfolio_df' not in st.session_state:
+                st.session_state['portfolio_df'] = self.data_service.load_portfolio_data()
+            user_df = st.session_state['portfolio_df']
+
+            # 2. Show editable table (user_df is always the user's last edit)
+            edited_df = self.ui.render_portfolio_table(user_df)
+
+            # 3. If user made changes, update session state
+            if not edited_df.equals(user_df):
+                st.session_state['portfolio_df'] = edited_df
+                st.success("✅ Changes saved to session!")
+
+            # 4. For calculations and display, create a copy and update prices
+            display_df = self.price_service.update_portfolio_prices(edited_df.copy())
+
+            # 5. Show metrics, charts, etc. using display_df
+            self._display_portfolio_metrics(display_df)
+            self._handle_rebalancing(display_df)
             self.ui.render_footer()
-            
+
         except Exception as e:
             logger.error(f"Application error: {e}")
             self.ui.render_error_message(str(e))
     
-    def _load_and_process_data(self) -> pd.DataFrame:
+    def _process_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Load portfolio data and update prices.
+        Update prices and calculate metrics.
         
+        Args:
+            df: DataFrame to process
+            
         Returns:
-            Processed DataFrame with current prices
+            Processed DataFrame with current prices and metrics
         """
-        # Load data
-        df = self.data_service.load_portfolio_data()
-        
         # Update prices
         df = self.price_service.update_portfolio_prices(df)
         
@@ -65,6 +70,29 @@ class PortfolioRebalancerApp:
         total_value, _, _ = calculate_portfolio_metrics(df)
         
         return df
+    
+    def _save_user_data_to_file(self, df: pd.DataFrame) -> None:
+        """
+        Save user data to file (only user-editable columns).
+        
+        Args:
+            df: DataFrame with user edits
+        """
+        try:
+            # Only save user-editable columns
+            user_columns = ["Ticker", "Shares Held", "Target Weight (%)"]
+            user_data = df[user_columns].copy()
+            
+            # Preserve original prices from session state
+            if "Current Price (per share)" in st.session_state['portfolio_df'].columns:
+                user_data["Current Price (per share)"] = st.session_state['portfolio_df']["Current Price (per share)"]
+            
+            self.data_service.save_portfolio_data(user_data)
+            st.success("💾 Changes saved permanently to file!")
+            
+        except Exception as e:
+            st.error(f"❌ Error saving to file: {e}")
+            logger.error(f"Error saving user data: {e}")
     
     def _display_portfolio_metrics(self, df: pd.DataFrame) -> None:
         """
@@ -112,8 +140,16 @@ class PortfolioRebalancerApp:
                     self.ui.render_error_message(error)
                 return
             
-            # Save current data
-            self.data_service.save_portfolio_data(df)
+            # Save current user data to file (only user-editable columns)
+            user_columns = ["Ticker", "Shares Held", "Target Weight (%)"]
+            user_data = df[user_columns].copy()
+            
+            # Add current prices from session state (preserve user-set prices)
+            if "Current Price (per share)" in st.session_state['portfolio_df'].columns:
+                user_data["Current Price (per share)"] = st.session_state['portfolio_df']["Current Price (per share)"]
+            
+            self.data_service.save_portfolio_data(user_data)
+            st.success("💾 Portfolio data saved to file!")
             
             # Calculate rebalancing metrics
             rebalanced_df = calculate_rebalancing_metrics(df, additional_amount)

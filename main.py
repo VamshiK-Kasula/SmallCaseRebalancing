@@ -17,6 +17,7 @@ logging.basicConfig(
 
 def main():
     """Main application entry point."""
+    print("🔄 Main function called - Streamlit rerun detected")
     try:
         # Create and run the application
         app = PortfolioRebalancerApp()

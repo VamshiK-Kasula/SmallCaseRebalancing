@@ -32,7 +32,33 @@ class PortfolioUIComponents:
         Returns:
             Edited DataFrame
         """
-        return st.data_editor(df, num_rows="dynamic", use_container_width=True)
+        # Rearrange columns in the desired order
+        column_order = [
+            "Ticker", 
+            "Shares Held", 
+            "Current Price (per share)", 
+            "Current Value", 
+            "Current Weight (%)", 
+            "Target Weight (%)"
+        ]
+        
+        # Only include columns that exist in the DataFrame
+        available_columns = [col for col in column_order if col in df.columns]
+        df_reordered = df[available_columns]
+        
+        st.markdown("### 📊 Portfolio Holdings")
+        st.markdown("Edit the values below to update your portfolio. Changes are automatically saved to session.")
+        
+        # Render the data editor with a stable key
+        edited_df = st.data_editor(
+            df_reordered, 
+            num_rows="dynamic", 
+            use_container_width=True,
+            key="portfolio_editor_stable",
+            on_change=None
+        )
+        
+        return edited_df
     
     @staticmethod
     def render_weight_summary(df: pd.DataFrame) -> None:
