@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f744990f-7704-49c0-a986-42dc8e3d619c" name="Changes" comment="" />
+    <list default="true" id="f744990f-7704-49c0-a986-42dc8e3d619c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/portfolio_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/portfolio_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tornado.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/tornado.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/portfolio.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/data_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/data_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/price_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/price_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/components.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/components.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,23 +33,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.rebalancing.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/vamshi/practical/Python/smallcase/pythonProject&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.portfolio_app.executor": "Run",
+    "Python.rebalancing.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/vamshi/practical/Python/smallcase/SmallCaseRebalancing",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\vamshi\practical\Python\smallcase\pythonProject" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\vamshi\practical\Python\smallcase\SmallCaseRebalancing\tests" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -60,6 +75,8 @@
       <workItem from="1753691788078" duration="5100000" />
       <workItem from="1753732758071" duration="478000" />
       <workItem from="1753767140575" duration="1241000" />
+      <workItem from="1753953908594" duration="8071000" />
+      <workItem from="1754225998215" duration="5637000" />
     </task>
     <servers />
   </component>
@@ -68,5 +85,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pythonProject$rebalancing.coverage" NAME="rebalancing Coverage Results" MODIFIED="1753692127512" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/SmallCaseRebalancing$portfolio_app.coverage" NAME="portfolio_app Coverage Results" MODIFIED="1754231338377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
   </component>
 </project>
