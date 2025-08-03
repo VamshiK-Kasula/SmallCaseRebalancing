@@ -5,7 +5,6 @@ import json
 import os
 import pandas as pd
 import numpy as np
-from typing import Dict, Any, Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,6 +14,7 @@ class DataService:
     """Service for managing portfolio data persistence."""
     
     def __init__(self, save_file: str = "data/tornado.json"):
+
         self.save_file = save_file
         self._ensure_data_directory()
     
@@ -23,7 +23,7 @@ class DataService:
         dir_path = os.path.dirname(self.save_file)
         if dir_path:  # Only create directory if there's a path
             os.makedirs(dir_path, exist_ok=True)
-    
+
     def load_portfolio_data(self) -> pd.DataFrame:
         """
         Load portfolio data from file or return default data.
@@ -87,6 +87,7 @@ class DataService:
             CSV data as bytes
         """
         return df.to_csv(index=False).encode('utf-8')
+
     
     def get_suggested_additional_amount(self, target_values: pd.Series, current_value: float) -> float:
         """
@@ -99,4 +100,4 @@ class DataService:
         Returns:
             Suggested additional amount
         """
-        return target_values.sum() - current_value 
+        return target_values.sum() - current_value

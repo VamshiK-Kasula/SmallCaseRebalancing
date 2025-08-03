@@ -8,10 +8,9 @@ from typing import Optional
 
 class PortfolioUIComponents:
     """UI components for portfolio rebalancing interface."""
-    
-    @staticmethod
-    def render_header() -> None:
-        """Render the application header."""
+
+    def __init__(self):
+        """Initialize the UI components."""
         st.set_page_config(page_title="Basket Rebalancer", layout="wide")
         st.title("📊 Basket Portfolio Rebalancer")
         
@@ -54,8 +53,6 @@ class PortfolioUIComponents:
             df_reordered, 
             num_rows="dynamic", 
             use_container_width=True,
-            key="portfolio_editor_stable",
-            on_change=None
         )
         
         return edited_df

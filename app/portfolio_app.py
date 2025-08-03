@@ -3,6 +3,7 @@ Main application class for portfolio rebalancing.
 """
 import pandas as pd
 import logging
+import numpy as np
 import streamlit as st
 from typing import Optional
 
@@ -21,30 +22,27 @@ class PortfolioRebalancerApp:
     def __init__(self):
         """Initialize the application with all required services."""
         self.price_service = PriceService()
+        self._price_cache: Dict[str, float] = {}
         self.data_service = DataService(app_config.SAVE_FILE)
         self.ui = PortfolioUIComponents()
+        self._portfolio_df = self.data_service.load_portfolio_data()
     
     def run(self) -> None:
         try:
             print("Running application")
 
-            # 1. Load user data from session state or file
-            if 'portfolio_df' not in st.session_state:
-                st.session_state['portfolio_df'] = self.data_service.load_portfolio_data()
-            user_df = st.session_state['portfolio_df']
+            # 1. Show editable table (user_df is always the user's last edit)
+            self._portfolio_df = self.ui.render_portfolio_table(self._portfolio_df)
 
-            # 2. Show editable table (user_df is always the user's last edit)
-            edited_df = self.ui.render_portfolio_table(user_df)
+            # 2. If user made changes, update session state
+            # if not edited_df.equals(user_df):
+            st.session_state['portfolio_df'] = self._portfolio_df
+            st.success("✅ Changes saved to session!")
 
-            # 3. If user made changes, update session state
-            if not edited_df.equals(user_df):
-                st.session_state['portfolio_df'] = edited_df
-                st.success("✅ Changes saved to session!")
+            # 3. For calculations and display, create a copy and update prices
+            display_df = self.update_portfolio_prices(self._portfolio_df.copy())
 
-            # 4. For calculations and display, create a copy and update prices
-            display_df = self.price_service.update_portfolio_prices(edited_df.copy())
-
-            # 5. Show metrics, charts, etc. using display_df
+            # 4. Show metrics, charts, etc. using display_df
             self._display_portfolio_metrics(display_df)
             self._handle_rebalancing(display_df)
             self.ui.render_footer()
@@ -52,6 +50,16 @@ class PortfolioRebalancerApp:
         except Exception as e:
             logger.error(f"Application error: {e}")
             self.ui.render_error_message(str(e))
+
+    def update_portfolio_prices(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Update current prices for all tickers in the portfolio.
+        """
+        tickers = df["Ticker"].tolist()
+        if not self._price_cache:
+            self._price_cache = self.price_service.get_portfolio_prices(tickers)
+        df["Current Price (per share)"] = df["Ticker"].apply(lambda ticker: self._price_cache.get(ticker, np.nan))
+        return df
     
     def _process_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
