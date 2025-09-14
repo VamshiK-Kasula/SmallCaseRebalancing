@@ -5,7 +5,7 @@ import pandas as pd
 import logging
 import numpy as np
 import streamlit as st
-from typing import Optional
+from typing import Optional, Dict
 
 from services.price_service import PriceService
 from services.data_service import DataService
@@ -31,18 +31,31 @@ class PortfolioRebalancerApp:
         try:
             print("Running application")
 
-            # 1. Show editable table (user_df is always the user's last edit)
+            # 0. Let user choose data input method
+            mode, uploaded = self.ui.render_data_input_selector()
+
+            # 1. If CSV mode and a file is uploaded, read it
+            if mode == "Upload CSV" and uploaded is not None:
+                try:
+                    csv_df = self.data_service.read_portfolio_csv(uploaded)
+                    self._portfolio_df = csv_df
+                    st.success("✅ CSV loaded successfully!")
+                except Exception as e:
+                    self.ui.render_error_message(str(e))
+                    # Fall back to existing data
+
+            # 2. Show editable table (user_df is always the user's last edit)
             self._portfolio_df = self.ui.render_portfolio_table(self._portfolio_df)
 
-            # 2. If user made changes, update session state
+            # 3. If user made changes, update session state
             # if not edited_df.equals(user_df):
             st.session_state['portfolio_df'] = self._portfolio_df
             st.success("✅ Changes saved to session!")
 
-            # 3. For calculations and display, create a copy and update prices
+            # 4. For calculations and display, create a copy and update prices
             display_df = self.update_portfolio_prices(self._portfolio_df.copy())
 
-            # 4. Show metrics, charts, etc. using display_df
+            # 5. Show metrics, charts, etc. using display_df
             self._display_portfolio_metrics(display_df)
             self._handle_rebalancing(display_df)
             self.ui.render_footer()

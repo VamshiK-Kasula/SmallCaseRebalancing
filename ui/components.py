@@ -21,6 +21,25 @@ class PortfolioUIComponents:
         st.markdown("---")
     
     @staticmethod
+    def render_data_input_selector():
+        """Render a selector for data input method and optionally a CSV uploader.
+
+        Returns:
+            Tuple[str, Optional[UploadedFile]]: selected mode and uploaded file if any
+        """
+        mode = st.radio(
+            "Choose how to provide portfolio data",
+            options=["Manual Entry", "Upload CSV"],
+            horizontal=True,
+        )
+        uploaded = None
+        if mode == "Upload CSV":
+            with st.expander("CSV requirements (exact columns)", expanded=False):
+                st.code("Ticker,Shares Held,Target Weight (%)")
+            uploaded = st.file_uploader("Upload CSV", type=["csv"], accept_multiple_files=False)
+        return mode, uploaded
+
+    @staticmethod
     def render_portfolio_table(df: pd.DataFrame) -> pd.DataFrame:
         """
         Render the editable portfolio table.

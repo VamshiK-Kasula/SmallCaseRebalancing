@@ -6,6 +6,7 @@ import os
 import pandas as pd
 import numpy as np
 import logging
+from typing import Union, IO
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +89,40 @@ class DataService:
         """
         return df.to_csv(index=False).encode('utf-8')
 
+    def _validate_csv_columns(self, df: pd.DataFrame) -> None:
+        """Validate that CSV has exactly the expected columns in the expected order."""
+        expected_columns = ["Ticker", "Shares Held", "Target Weight (%)"]
+        incoming_columns = [col.strip() for col in df.columns.tolist()]
+        if incoming_columns != expected_columns:
+            raise ValueError(
+                "CSV schema mismatch. Expected columns exactly: "
+                f"{expected_columns} but got {incoming_columns}."
+            )
+
+    def read_portfolio_csv(self, input_source: Union[str, IO[str], IO[bytes]]) -> pd.DataFrame:
+        """
+        Read a portfolio CSV and validate it matches the export schema exactly.
+
+        The CSV must contain exactly these columns in this order:
+        ["Ticker", "Shares Held", "Target Weight (%)"].
+        """
+        try:
+            df = pd.read_csv(input_source)
+        except Exception as e:
+            logger.error(f"Failed to read CSV: {e}")
+            raise
+        
+        # Validate schema strictly
+        self._validate_csv_columns(df)
+
+        # Coerce types and clean values
+        df["Ticker"] = df["Ticker"].astype(str).str.strip()
+        df["Shares Held"] = pd.to_numeric(df["Shares Held"], errors="raise").astype(int)
+        df["Target Weight (%)"] = pd.to_numeric(df["Target Weight (%)"], errors="raise").astype(float)
+
+        logger.info(f"Successfully loaded portfolio CSV with {len(df)} rows")
+        return df
+    
     
     def get_suggested_additional_amount(self, target_values: pd.Series, current_value: float) -> float:
         """
